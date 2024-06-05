@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+    </style>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <div id="chat-area" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+    <input type="text" id="user-input" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById("user-input").value;
+            if (userInput.trim() === "") return;
+
+            appendMessage("You: " + userInput);
+            document.getElementById("user-input").value = "";
+
+            fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: userInput
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var botResponse = data.response;
+                appendMessage("Chatbot: " + botResponse);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function appendMessage(message) {
+            var chatArea = document.getElementById("chat-area");
+            var newMessage = document.createElement("p");
+            newMessage.textContent = message;
+            chatArea.appendChild(newMessage);
+        }
+    </script>
+</body>
+</html>

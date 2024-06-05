@@ -1,0 +1,6 @@
+Pre-requisite:
+Docker
+
+How to run project:
+docker build -t my-flask-app .
+docker run -p 5000:5000 my-flask-app
